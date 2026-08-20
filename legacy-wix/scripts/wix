@@ -1,0 +1,146 @@
+#!/usr/bin/env bash
+# wix — Wix REST helper for Susana's website. See ../CLAUDE.md for the full manual.
+# Secrets are read from ~/.config/wix-susana/env (override with WIX_SUSANA_ENV).
+set -euo pipefail
+
+ENV_FILE="${WIX_SUSANA_ENV:-$HOME/.config/wix-susana/env}"
+# shellcheck disable=SC1090
+[[ -f "$ENV_FILE" ]] && . "$ENV_FILE"
+
+BASE="https://www.wixapis.com"
+KEYS_URL="https://manage.wix.com/account/api-keys"
+
+die() { echo "wix: $*" >&2; exit 1; }
+have_jq() { command -v jq >/dev/null 2>&1; }
+
+need_key() {
+  [[ -n "${WIX_API_KEY:-}" ]] || die "WIX_API_KEY is empty. Create a key at $KEYS_URL and paste it into $ENV_FILE (run scripts/setup.sh first if that file doesn't exist)."
+}
+
+# call <site|acct> <METHOD> <PATH> [JSON_BODY]
+call() {
+  local scope="$1" method="$2" path="$3" body="${4:-}"
+  need_key
+  local -a args=(-sS -X "$method" -H "Authorization: $WIX_API_KEY" -H "Content-Type: application/json")
+  if [[ "$scope" == site ]]; then
+    [[ -n "${WIX_SITE_ID:-}" ]] || die "WIX_SITE_ID is empty in $ENV_FILE. Run 'scripts/wix sites' to find it, or copy the GUID after /dashboard/ in the site's dashboard URL."
+    args+=(-H "wix-site-id: $WIX_SITE_ID")
+  else
+    [[ -n "${WIX_ACCOUNT_ID:-}" ]] || die "WIX_ACCOUNT_ID is empty in $ENV_FILE. It is shown at $KEYS_URL."
+    args+=(-H "wix-account-id: $WIX_ACCOUNT_ID")
+  fi
+  [[ -n "$body" ]] && args+=(--data-raw "$body")
+  curl "${args[@]}" "$BASE$path"
+}
+
+# http_check <site|acct> <METHOD> <PATH> [JSON_BODY] — prints "HTTPCODE<TAB>body"
+http_check() {
+  local scope="$1" method="$2" path="$3" body="${4:-}"
+  local -a args=(-sS -o /tmp/wix_check_body.$$ -w '%{http_code}' -X "$method" -H "Authorization: $WIX_API_KEY" -H "Content-Type: application/json")
+  if [[ "$scope" == site ]]; then args+=(-H "wix-site-id: ${WIX_SITE_ID:-}"); else args+=(-H "wix-account-id: ${WIX_ACCOUNT_ID:-}"); fi
+  [[ -n "$body" ]] && args+=(--data-raw "$body")
+  local code
+  code=$(curl "${args[@]}" "$BASE$path" 2>/dev/null || echo "000")
+  printf '%s\t%s\n' "$code" "$(cat /tmp/wix_check_body.$$ 2>/dev/null)"
+  rm -f /tmp/wix_check_body.$$
+}
+
+doctor() {
+  local ok=1
+  echo "== wix doctor =="
+  echo "env file: $ENV_FILE"
+  if [[ ! -f "$ENV_FILE" ]]; then
+    echo "  ✗ missing — run scripts/setup.sh, then fill in the values"; exit 1
+  fi
+  local perms
+  perms=$(stat -f '%Lp' "$ENV_FILE" 2>/dev/null || stat -c '%a' "$ENV_FILE" 2>/dev/null || echo '?')
+  echo "  ✓ exists (perms $perms)"
+  [[ "$perms" == "600" ]] || echo "  ! consider: chmod 600 $ENV_FILE"
+
+  if [[ -z "${WIX_API_KEY:-}" ]]; then
+    echo "  ✗ WIX_API_KEY empty — create one at $KEYS_URL (account owner only) and paste it in"; exit 1
+  fi
+  echo "  ✓ WIX_API_KEY set (${WIX_API_KEY:0:6}…, ${#WIX_API_KEY} chars)"
+
+  if [[ -n "${WIX_ACCOUNT_ID:-}" ]]; then
+    local res code body
+    res=$(http_check acct POST /site-list/v2/sites/query '{"query":{"cursorPaging":{"limit":100}}}')
+    code="${res%%$'\t'*}"; body="${res#*$'\t'}"
+    if [[ "$code" == "200" ]]; then
+      if have_jq; then
+        local n; n=$(echo "$body" | jq '.sites | length')
+        echo "  ✓ account access OK — $n site(s) visible"
+        echo "$body" | jq -r '.sites[] | "      \(.id)  \(.displayName)  published=\(.published)  \(.viewUrl // "-")"'
+      else
+        echo "  ✓ account access OK (install jq for a readable site list)"
+      fi
+    else
+      ok=0; echo "  ✗ account-level call failed (HTTP $code): $body"
+    fi
+  else
+    echo "  ! WIX_ACCOUNT_ID empty — 'wix sites' won't work until set (shown at $KEYS_URL)"
+  fi
+
+  if [[ -n "${WIX_SITE_ID:-}" ]]; then
+    local res code body
+    res=$(http_check site GET /site-properties/v4/properties)
+    code="${res%%$'\t'*}"; body="${res#*$'\t'}"
+    if [[ "$code" == "200" ]]; then
+      if have_jq; then
+        echo "  ✓ site access OK — $(echo "$body" | jq -r '.properties.siteDisplayName // .properties.businessName // "site reachable"')"
+      else
+        echo "  ✓ site access OK"
+      fi
+    else
+      ok=0; echo "  ✗ site-level call failed (HTTP $code): $body"
+    fi
+  else
+    echo "  ! WIX_SITE_ID empty — set it to enable site-level commands (run 'scripts/wix sites' to find it)"
+  fi
+
+  [[ $ok -eq 1 ]] && echo "== doctor done ==" || { echo "== doctor found problems =="; exit 1; }
+}
+
+usage() {
+  cat <<'EOF'
+usage: wix <command> [args]
+
+  doctor                       health check (env file, key, account + site reachability)
+  sites                        list sites in the account (account-level)
+  props                        this site's properties
+  collections                  list CMS data collections
+  items <collectionId> [n]     query first n (default 50) items of a collection
+  api  <METHOD> <PATH> [JSON]  raw site-level call   (adds wix-site-id header)
+  acct <METHOD> <PATH> [JSON]  raw account-level call (adds wix-account-id header)
+  keys                         print the API Keys Manager URL
+
+Secrets: ~/.config/wix-susana/env (create with scripts/setup.sh). Docs: ../CLAUDE.md
+EOF
+}
+
+cmd="${1:-help}"; shift || true
+case "$cmd" in
+  doctor) doctor ;;
+  sites)
+    out=$(call acct POST /site-list/v2/sites/query '{"query":{"cursorPaging":{"limit":100}}}')
+    if have_jq; then
+      echo "$out" | jq -r '.sites[] | [.id, .displayName, "published=\(.published)", (.viewUrl // "-")] | join("  ")'
+    else
+      echo "$out"
+    fi ;;
+  props) call site GET /site-properties/v4/properties ;;
+  collections) call site GET "/wix-data/v2/collections?paging.limit=100" ;;
+  items)
+    [[ $# -ge 1 ]] || die "usage: wix items <collectionId> [n]"
+    limit="${2:-50}"
+    call site POST /wix-data/v2/items/query "{\"dataCollectionId\":\"$1\",\"query\":{\"paging\":{\"limit\":$limit}}}" ;;
+  api)
+    [[ $# -ge 2 ]] || die "usage: wix api <METHOD> <PATH> [JSON]"
+    call site "$@" ;;
+  acct)
+    [[ $# -ge 2 ]] || die "usage: wix acct <METHOD> <PATH> [JSON]"
+    call acct "$@" ;;
+  keys) echo "$KEYS_URL" ;;
+  help|-h|--help) usage ;;
+  *) usage; exit 1 ;;
+esac

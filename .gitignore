@@ -1,0 +1,12 @@
+.DS_Store
+node_modules/
+dist/
+.astro/
+.vercel/
+*.env
+.env
+.env.*
+env
+*.key
+secrets*
+content/scrape/*.html
