@@ -1,0 +1,74 @@
+---
+import { getCollection, render } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+import { whatsappCurso } from "../../config";
+
+export async function getStaticPaths() {
+  const cursos = await getCollection("cursos");
+  return cursos.map((curso) => ({
+    params: { slug: curso.id },
+    props: { curso },
+  }));
+}
+
+const { curso } = Astro.props;
+const { Content } = await render(curso);
+const { titulo, resumen, precio, earlyBird, duracion, proximaFecha, lugar, paymentLink } = curso.data;
+const inscripcionHref = paymentLink || whatsappCurso(titulo);
+---
+
+<Layout title={titulo} description={resumen}>
+  <section class="mx-auto max-w-3xl px-6 py-20">
+    <a href="/cursos/" class="text-sm text-terracota hover:text-oliva">← Cursos y Talleres</a>
+    <h1 class="font-display text-4xl md:text-5xl mt-4 mb-6">{titulo}</h1>
+
+    <div class="flex flex-wrap gap-6 text-sm text-tinta/80 mb-10 border-y border-arena py-6">
+      {precio && (
+        <div>
+          <p class="text-tinta/50 mb-1">Precio</p>
+          <p class="font-medium">
+            {earlyBird ? (
+              <>
+                <span class="text-terracota">${earlyBird.toLocaleString("es-MX")} MXN</span> early bird
+                <span class="text-tinta/50"> · ${precio.toLocaleString("es-MX")} MXN regular</span>
+              </>
+            ) : (
+              <span class="text-terracota">${precio.toLocaleString("es-MX")} MXN</span>
+            )}
+          </p>
+        </div>
+      )}
+      {duracion && (
+        <div>
+          <p class="text-tinta/50 mb-1">Duración</p>
+          <p class="font-medium">{duracion}</p>
+        </div>
+      )}
+      <div>
+        <p class="text-tinta/50 mb-1">Próxima fecha</p>
+        <p class="font-medium">{proximaFecha}</p>
+      </div>
+      {lugar && (
+        <div>
+          <p class="text-tinta/50 mb-1">Lugar</p>
+          <p class="font-medium">{lugar}</p>
+        </div>
+      )}
+    </div>
+
+    <div class="prose-custom text-tinta/85 leading-relaxed [&>p]:mb-4">
+      <Content />
+    </div>
+
+    <div class="mt-12">
+      <a
+        href={inscripcionHref}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-block rounded-full bg-terracota px-8 py-3 text-sm font-medium text-crema hover:bg-oliva transition-colors"
+      >
+        Inscríbete
+      </a>
+    </div>
+  </section>
+</Layout>

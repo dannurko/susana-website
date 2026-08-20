@@ -1,0 +1,67 @@
+---
+import { Image } from "astro:assets";
+import Layout from "../layouts/Layout.astro";
+import sesionTerapia from "../assets/sesion-terapia.jpg";
+import sesionOnline from "../assets/sesion-online.jpg";
+import { contacto } from "../config";
+
+const tecnicas = [
+  { nombre: "Core Energética", texto: "La columna vertebral del trabajo: moviliza la energía bloqueada para ponerla al servicio de la creatividad, la espontaneidad y la fuerza vital." },
+  { nombre: "Coaching Ontológico", texto: "Pone foco en tus metas y sueños, y en el lenguaje que construye tu realidad." },
+  { nombre: "Eneagrama", texto: "Un mapa de autoconocimiento para entender tus patrones de personalidad." },
+  { nombre: "Dance of Joy", texto: "Danza extática y respiración holotrópica como meditación en movimiento." },
+  { nombre: "Constelaciones Familiares", texto: "Para romper patrones y lealtades familiares que impiden ser tú mismo/a." },
+  { nombre: "Coaching Sistémico", texto: "Mirada de sistemas para diagnosticar y resolver lo que se repite." },
+];
+---
+
+<Layout title="Terapia" description="Sesiones de psicoterapia individual con Susana Basáñez: Core Energética, Eneagrama, Constelaciones Familiares y Coaching Ontológico.">
+  <section class="mx-auto max-w-4xl px-6 py-20 text-center">
+    <h1 class="font-display text-4xl md:text-5xl mb-6">¿Qué esperar de un proceso terapéutico conmigo?</h1>
+    <p class="text-tinta/80 leading-relaxed max-w-2xl mx-auto">
+      Ser tú mismo/a. Encontrar tu potencia, tu verdad y alinearte con tu
+      sentido de vida, salir de lo que te atora y tomar responsabilidad de tu
+      momento de vida y tus decisiones. En nuestras sesiones trabajaremos con
+      las diferentes técnicas adaptándonos a lo que tú necesitas, quitando
+      todo lo que te sobra para regresar a quien tú eres, a tu verdadera
+      esencia.
+    </p>
+  </section>
+
+  <section class="mx-auto max-w-6xl px-6 pb-20 grid gap-6 md:grid-cols-2">
+    <Image src={sesionTerapia} alt="Sesión de terapia presencial" class="rounded-2xl w-full h-full object-cover grayscale" widths={[480, 768, 1024]} sizes="(min-width: 768px) 50vw, 100vw" />
+    <Image src={sesionOnline} alt="Sesión de terapia online" class="rounded-2xl w-full h-full object-cover grayscale" widths={[480, 768, 1024]} sizes="(min-width: 768px) 50vw, 100vw" />
+  </section>
+
+  <section class="bg-arena">
+    <div class="mx-auto max-w-6xl px-6 py-20">
+      <h2 class="font-display text-3xl md:text-4xl text-center mb-12">Técnicas de trabajo</h2>
+      <div class="grid gap-8 md:grid-cols-3">
+        {tecnicas.map((t) => (
+          <div class="rounded-2xl bg-crema p-6">
+            <h3 class="font-display text-xl mb-2 text-terracota">{t.nombre}</h3>
+            <p class="text-sm text-tinta/80">{t.texto}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-3xl px-6 py-20 text-center">
+    <h2 class="font-display text-3xl md:text-4xl mb-8">Tarifa</h2>
+    <div class="inline-block rounded-2xl border border-arena px-12 py-8">
+      <p class="font-display text-4xl text-terracota mb-2">$1,800 MXN</p>
+      <p class="text-sm text-tinta/70">Consulta privada, presencial u online — 1 hora</p>
+    </div>
+    <div class="mt-10">
+      <a
+        href={contacto.whatsapp}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-block rounded-full bg-terracota px-8 py-3 text-sm font-medium text-crema hover:bg-oliva transition-colors"
+      >
+        Agenda tu sesión
+      </a>
+    </div>
+  </section>
+</Layout>

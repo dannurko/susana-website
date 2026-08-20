@@ -21,3 +21,17 @@ Read the latest entries before starting work so the two Claudes don't clobber ea
   Tailwind 4 + Vercel adapter scaffolded; curated images in `src/assets/`. No `src/`
   pages built yet. **Work handed off to machine 2 — see HANDOFF.md.** Repo:
   https://github.com/dannurko/susana-website (private).
+- **Full site built (machine 2).** Installed `gh`, Node, ran `npm install`. Built all
+  8 pages per the HANDOFF.md design spec: `index`, `sobre-mi`, `terapia`,
+  `cursos/index` + `cursos/[slug]` (4 courses via content collection — eneagrama,
+  constelaciones-familiares, dance-of-joy, yoga-kundalini), `empresas`, `podcast`,
+  `contacto`. Shared `Nav` (sticky, mobile menu), `Footer`, floating WhatsApp button
+  in `Layout.astro`. Tailwind v4 `@theme` tokens (crema/arena/tinta/oliva/terracota),
+  Cormorant Garamond + Figtree via Google Fonts. `api/contact.ts` wired to Resend
+  REST API with `RESEND_API_KEY`/`CONTACT_TO` env vars; falls back to a WhatsApp
+  message (503) since no Resend account/key exists yet. `paymentLink` empty on all
+  courses — "Inscríbete" falls back to a prefilled WhatsApp message until Dan
+  provides Stripe/Mercado Pago links. `npm run build` clean; verified in-browser
+  (desktop + mobile: hero, nav, mobile menu, all 8 pages, course detail, contact
+  form fallback) via the Browser pane. Pushed to `main` (pre-domain = shared
+  preview per CLAUDE.md workflow rules).

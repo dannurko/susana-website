@@ -32,7 +32,7 @@ this: this file is your operating manual. Read [CHANGES.md](CHANGES.md) before w
 
 - [x] GitHub auth on machine 1 (`dannurko`, repo scope) — 2026-08-19
 - [x] Private GitHub repo created and pushed: https://github.com/dannurko/susana-website
-- [ ] GitHub access on machine 2 (`gh auth login`, collaborator or same account)
+- [x] GitHub access on machine 2 (`gh auth login` as collaborator `SusanaBasanez`) — 2026-08-19
 - [ ] Vercel account (sign in with GitHub, one click) + repo connected
 - [x] Site scraped: susanabasanez.com → `content/scrape/site-content.md` + `content/images/`
 - [ ] Domain: registrar + who holds DNS access (Dan believes it's registered AT Wix — verify in the Wix dashboard at cutover time)

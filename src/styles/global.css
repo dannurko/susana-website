@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+@theme {
+  --color-crema: #F7F3EC;
+  --color-arena: #E9E2D4;
+  --color-tinta: #262B22;
+  --color-oliva: #5F6F52;
+  --color-terracota: #BC6C4F;
+
+  --font-display: "Cormorant Garamond", serif;
+  --font-body: "Figtree", sans-serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: var(--color-crema);
+    color: var(--color-tinta);
+    font-family: var(--font-body);
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-weight: 500;
+  }
+}

@@ -1,0 +1,129 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { contacto } from "../config";
+---
+
+<Layout title="Contacto" description="Escríbele a Susana Basáñez — teléfono, email, WhatsApp y consultorio en Colonia Condesa, Ciudad de México.">
+  <section class="mx-auto max-w-5xl px-6 py-20 grid gap-16 md:grid-cols-2">
+    <div>
+      <h1 class="font-display text-4xl md:text-5xl mb-6">Contacto</h1>
+      <p class="text-tinta/80 mb-10">
+        Escríbeme y platiquemos qué necesitas en este momento de tu vida.
+      </p>
+
+      <ul class="flex flex-col gap-6 text-sm">
+        <li>
+          <p class="text-tinta/50 mb-1">Teléfono / WhatsApp</p>
+          <a href={contacto.telefonoHref} class="font-medium text-terracota hover:text-oliva">{contacto.telefono}</a>
+        </li>
+        <li>
+          <p class="text-tinta/50 mb-1">Email</p>
+          <a href={`mailto:${contacto.email}`} class="font-medium text-terracota hover:text-oliva">{contacto.email}</a>
+        </li>
+        <li>
+          <p class="text-tinta/50 mb-1">Consultorio</p>
+          <p class="font-medium">{contacto.direccion}</p>
+        </li>
+      </ul>
+
+      <a
+        href={contacto.whatsapp}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="mt-10 inline-block rounded-full bg-oliva px-8 py-3 text-sm font-medium text-crema hover:bg-terracota transition-colors"
+      >
+        Escríbeme por WhatsApp
+      </a>
+    </div>
+
+    <div>
+      <form id="contact-form" class="flex flex-col gap-4" novalidate>
+        <div>
+          <label for="nombre" class="block text-sm text-tinta/70 mb-1">Nombre</label>
+          <input
+            type="text"
+            id="nombre"
+            name="nombre"
+            required
+            class="w-full rounded-lg border border-arena bg-crema px-4 py-3 text-sm focus:border-oliva focus:outline-none"
+          />
+        </div>
+        <div>
+          <label for="email" class="block text-sm text-tinta/70 mb-1">Email</label>
+          <input
+            type="email"
+            id="email"
+            name="email"
+            required
+            class="w-full rounded-lg border border-arena bg-crema px-4 py-3 text-sm focus:border-oliva focus:outline-none"
+          />
+        </div>
+        <div>
+          <label for="mensaje" class="block text-sm text-tinta/70 mb-1">Mensaje</label>
+          <textarea
+            id="mensaje"
+            name="mensaje"
+            rows="5"
+            required
+            class="w-full rounded-lg border border-arena bg-crema px-4 py-3 text-sm focus:border-oliva focus:outline-none"
+          ></textarea>
+        </div>
+
+        <button
+          type="submit"
+          class="mt-2 rounded-full bg-terracota px-8 py-3 text-sm font-medium text-crema hover:bg-oliva transition-colors disabled:opacity-60"
+        >
+          Enviar mensaje
+        </button>
+
+        <p id="form-status" class="text-sm mt-2" role="status"></p>
+      </form>
+    </div>
+  </section>
+</Layout>
+
+<script define:vars={{ whatsapp: contacto.whatsapp }}>
+  const form = document.getElementById("contact-form");
+  const status = document.getElementById("form-status");
+  const submitButton = form?.querySelector('button[type="submit"]');
+
+  form?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    if (!status || !submitButton) return;
+
+    const data = {
+      nombre: form.nombre.value,
+      email: form.email.value,
+      mensaje: form.mensaje.value,
+    };
+
+    submitButton.disabled = true;
+    status.textContent = "Enviando…";
+    status.className = "text-sm mt-2 text-tinta/60";
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+
+      if (res.ok) {
+        status.textContent = "¡Mensaje enviado! Te responderemos pronto.";
+        status.className = "text-sm mt-2 text-oliva";
+        form.reset();
+      } else if (res.status === 503) {
+        status.innerHTML = `El formulario aún no está activo. Escríbenos directo por <a href="${whatsapp}" target="_blank" rel="noopener noreferrer" class="underline text-terracota">WhatsApp</a>.`;
+        status.className = "text-sm mt-2 text-terracota";
+      } else {
+        status.innerHTML = `No pudimos enviar tu mensaje. Escríbenos por <a href="${whatsapp}" target="_blank" rel="noopener noreferrer" class="underline text-terracota">WhatsApp</a>.`;
+        status.className = "text-sm mt-2 text-terracota";
+      }
+    } catch {
+      status.innerHTML = `No pudimos enviar tu mensaje. Escríbenos por <a href="${whatsapp}" target="_blank" rel="noopener noreferrer" class="underline text-terracota">WhatsApp</a>.`;
+      status.className = "text-sm mt-2 text-terracota";
+    } finally {
+      submitButton.disabled = false;
+    }
+  });
+</script>

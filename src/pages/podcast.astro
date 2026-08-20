@@ -1,0 +1,69 @@
+---
+import { Image } from "astro:assets";
+import Layout from "../layouts/Layout.astro";
+import podcastCover from "../assets/podcast-cover.jpg";
+import { social } from "../config";
+
+const episodios = [
+  "Ep.1 — ¿Qué es el Eneagrama?",
+  "Ep.2 — Los eneatipos y sus pasiones",
+  "Ep.3 — Situaciones que se nos repiten",
+  "Ep.4 — Carácter y Ego",
+  "Ep.5 — ¿Por qué sufrimos?",
+  "Ep.6 — Círculos viciosos",
+  "Ep.7 — Alessandra",
+  "Ep.8 — Ricardo",
+];
+---
+
+<Layout title="Podcast" description='Podcast "¿De qué se trata esto?" con Susana Basáñez e Ileana Pineda — asuntos inquietantes sobre la vida y la existencia.'>
+  <section class="mx-auto max-w-5xl px-6 py-20 grid gap-12 md:grid-cols-2 items-center">
+    <Image
+      src={podcastCover}
+      alt="Podcast ¿De qué se trata esto?"
+      class="rounded-2xl w-full h-auto object-cover"
+      widths={[480, 768, 1024]}
+      sizes="(min-width: 768px) 50vw, 100vw"
+      priority
+    />
+    <div>
+      <h1 class="font-display text-4xl md:text-5xl mb-4">"¿De qué se trata esto?"</h1>
+      <p class="text-tinta/80 leading-relaxed mb-6">
+        En este espacio exploramos asuntos inquietantes sobre la vida y la
+        existencia. Susana Basáñez e Ileana Pineda te invitan a indagar y
+        sorprenderte dándole voz a las múltiples experiencias que como seres
+        humanos tenemos durante la vida. El Ego, El Miedo, Las Relaciones,
+        Sexualidad y Erotismo, Las Pérdidas, y mucho más.
+      </p>
+      <div class="flex flex-wrap gap-4">
+        <a
+          href={social.spotify}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-block rounded-full bg-oliva px-8 py-3 text-sm font-medium text-crema hover:bg-terracota transition-colors"
+        >
+          Escuchar en Spotify
+        </a>
+        <a
+          href={social.podcastInstagram}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-block rounded-full border border-tinta px-8 py-3 text-sm font-medium text-tinta hover:bg-tinta hover:text-crema transition-colors"
+        >
+          @dequesetrataesto
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <section class="bg-arena">
+    <div class="mx-auto max-w-3xl px-6 py-16">
+      <h2 class="font-display text-3xl md:text-4xl text-center mb-10">Episodios</h2>
+      <ul class="grid gap-3 sm:grid-cols-2">
+        {episodios.map((ep) => (
+          <li class="rounded-xl bg-crema px-5 py-4 text-sm text-tinta/80">{ep}</li>
+        ))}
+      </ul>
+    </div>
+  </section>
+</Layout>

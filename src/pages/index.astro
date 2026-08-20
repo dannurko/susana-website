@@ -1,0 +1,185 @@
+---
+import { Image } from "astro:assets";
+import Layout from "../layouts/Layout.astro";
+import heroEstudio from "../assets/hero-estudio.jpg";
+import grupoTaller from "../assets/grupo-taller.jpg";
+import podcastCover from "../assets/podcast-cover.jpg";
+import logoBlanco from "../assets/logo-blanco.png";
+import { contacto, social } from "../config";
+
+const pilares = [
+  {
+    titulo: "Terapia",
+    texto: "Sesiones individuales de Core Energética, presenciales y online, para encontrar tu potencia y tu verdad.",
+    href: "/terapia/",
+  },
+  {
+    titulo: "Cursos y Talleres",
+    texto: "Eneagrama, Constelaciones Familiares, Dance of Joy y Yoga Kundalini — espacios grupales de transformación.",
+    href: "/cursos/",
+  },
+  {
+    titulo: "Empresas",
+    texto: "Bienestar organizacional, teambuilding y consultoría sistémica para equipos y liderazgo humano.",
+    href: "/empresas/",
+  },
+];
+
+const precios = [
+  { nombre: "Consulta Privada", precio: "$1,800 MXN", detalle: "Presencial u online, 1 hora" },
+  { nombre: "Constelación Familiar", precio: "$2,500 MXN", detalle: "Sesión grupal, presencial u online" },
+  { nombre: "Talleres", precio: "desde $4,400 MXN", detalle: "Eneagrama y más, precio early bird" },
+];
+
+const testimonios = [
+  { texto: "El Eneagrama cambió mi vida, me ayudó a conocerme como nunca, a aceptarme, a ser más compasiva. Después de haber tomado dos cursos con Susana se los recomiendo muchísimo, es la mejor.", autor: "Ileana", contexto: "Taller de Eneagrama" },
+  { texto: "Después del taller de danza extática y respiración holotrópica mi vida se transformó, cambié de trabajo y estoy agradecida por todo lo recibido en este año.", autor: "Laura", contexto: "Dance of Joy" },
+  { texto: "Con una sensación de gratitud terminé la sesión. Todo es como debe ser, todo está bien. Me sentí más creativa. ¿Cómo no serlo? Formo parte de todo.", autor: "Mireya", contexto: "Terapia individual online" },
+];
+---
+
+<Layout>
+  <!-- Hero -->
+  <section class="relative">
+    <div class="relative h-[85vh] min-h-[560px] w-full overflow-hidden">
+      <Image
+        src={heroEstudio}
+        alt="Susana Basáñez en sesión de terapia"
+        class="h-full w-full object-cover grayscale"
+        widths={[640, 1024, 1600, 2000]}
+        sizes="100vw"
+        priority
+      />
+      <div class="absolute inset-0 bg-tinta/40"></div>
+    </div>
+
+    <div class="absolute inset-0 flex flex-col items-center justify-center px-6 text-center text-crema">
+      <Image src={logoBlanco} alt="Susana Basáñez" class="h-20 w-auto mb-6" />
+      <p class="font-display text-2xl md:text-4xl max-w-2xl mb-8">
+        Ser tú misma/o, encontrar tu potencia y alinearte con tu sentido de vida.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4">
+        <a
+          href={contacto.whatsapp}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="rounded-full bg-terracota px-8 py-3 text-sm font-medium tracking-wide text-crema transition-colors hover:bg-oliva"
+        >
+          Agenda tu sesión
+        </a>
+        <a
+          href="/cursos/"
+          class="rounded-full border border-crema px-8 py-3 text-sm font-medium tracking-wide text-crema transition-colors hover:bg-crema hover:text-tinta"
+        >
+          Ver cursos y talleres
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pilares -->
+  <section class="mx-auto max-w-6xl px-6 py-20 grid gap-10 md:grid-cols-3">
+    {pilares.map((p) => (
+      <a href={p.href} class="group block rounded-2xl bg-arena p-8 transition-colors hover:bg-oliva">
+        <h2 class="font-display text-2xl mb-3 group-hover:text-crema">{p.titulo}</h2>
+        <p class="text-sm text-tinta/80 group-hover:text-crema/90">{p.texto}</p>
+        <span class="mt-4 inline-block text-sm font-medium text-terracota group-hover:text-crema">Saber más →</span>
+      </a>
+    ))}
+  </section>
+
+  <!-- Sobre mí teaser -->
+  <section class="bg-arena">
+    <div class="mx-auto max-w-6xl px-6 py-20 grid gap-12 md:grid-cols-2 items-center">
+      <Image
+        src={grupoTaller}
+        alt="Susana Basáñez dirigiendo un taller grupal"
+        class="rounded-2xl w-full h-auto object-cover grayscale"
+        widths={[480, 768, 1024]}
+        sizes="(min-width: 768px) 50vw, 100vw"
+      />
+      <div>
+        <h2 class="font-display text-3xl md:text-4xl mb-4">26+ años acompañando procesos de transformación</h2>
+        <p class="text-tinta/80 mb-4">
+          Psicoterapeuta de Core Energética, Consteladora Familiar, Especialista
+          en Eneagrama, Consultora Sistémica y Coach Ontológico. Formada con
+          grandes maestros como Claudio Naranjo, Keith Dowman y Daniel Odier.
+        </p>
+        <a href="/sobre-mi/" class="inline-block text-sm font-medium text-terracota hover:text-oliva">
+          Conoce mi historia →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Precios -->
+  <section class="mx-auto max-w-6xl px-6 py-20">
+    <h2 class="font-display text-3xl md:text-4xl text-center mb-12">Servicios</h2>
+    <div class="grid gap-8 md:grid-cols-3">
+      {precios.map((p) => (
+        <div class="rounded-2xl border border-arena p-8 text-center">
+          <h3 class="font-display text-xl mb-2">{p.nombre}</h3>
+          <p class="text-3xl font-display text-terracota mb-2">{p.precio}</p>
+          <p class="text-sm text-tinta/70">{p.detalle}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Testimonios -->
+  <section class="bg-tinta text-crema">
+    <div class="mx-auto max-w-6xl px-6 py-20">
+      <h2 class="font-display text-3xl md:text-4xl text-center mb-12">Testimonios</h2>
+      <div class="grid gap-8 md:grid-cols-3">
+        {testimonios.map((t) => (
+          <figure class="rounded-2xl bg-crema/5 p-8">
+            <blockquote class="text-sm text-crema/90 leading-relaxed mb-4">"{t.texto}"</blockquote>
+            <figcaption class="text-sm text-terracota">
+              {t.autor} <span class="text-crema/50">— {t.contexto}</span>
+            </figcaption>
+          </figure>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Podcast banner -->
+  <section class="mx-auto max-w-6xl px-6 py-20 grid gap-10 md:grid-cols-2 items-center">
+    <Image
+      src={podcastCover}
+      alt="Podcast ¿De qué se trata esto?"
+      class="rounded-2xl w-full h-auto object-cover"
+      widths={[480, 768, 1024]}
+      sizes="(min-width: 768px) 50vw, 100vw"
+    />
+    <div>
+      <h2 class="font-display text-3xl md:text-4xl mb-4">Podcast "¿De qué se trata esto?"</h2>
+      <p class="text-tinta/80 mb-6">
+        Con Ileana Pineda, exploramos asuntos inquietantes sobre la vida y la
+        existencia: el ego, el miedo, las relaciones, las pérdidas y mucho más.
+      </p>
+      <a
+        href={social.spotify}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-block rounded-full bg-oliva px-8 py-3 text-sm font-medium text-crema hover:bg-terracota transition-colors"
+      >
+        Escuchar en Spotify
+      </a>
+    </div>
+  </section>
+
+  <!-- Contacto CTA -->
+  <section class="bg-arena">
+    <div class="mx-auto max-w-3xl px-6 py-20 text-center">
+      <h2 class="font-display text-3xl md:text-4xl mb-4">¿Lista/o para comenzar?</h2>
+      <p class="text-tinta/80 mb-8">Escríbeme y platiquemos qué necesitas en este momento de tu vida.</p>
+      <a
+        href="/contacto/"
+        class="inline-block rounded-full bg-terracota px-8 py-3 text-sm font-medium text-crema hover:bg-oliva transition-colors"
+      >
+        Ir a contacto
+      </a>
+    </div>
+  </section>
+</Layout>

@@ -1,0 +1,84 @@
+---
+import { Image } from "astro:assets";
+import logoNegro from "../assets/logo-negro.png";
+import { nav, contacto } from "../config";
+
+const path = Astro.url.pathname;
+---
+
+<header class="sticky top-0 z-50 bg-crema/95 backdrop-blur border-b border-arena">
+  <div class="mx-auto max-w-6xl px-6 flex items-center justify-between h-20">
+    <a href="/" class="shrink-0">
+      <Image src={logoNegro} alt="Susana Basáñez" class="h-12 w-auto" />
+    </a>
+
+    <nav class="hidden lg:flex items-center gap-8">
+      {nav.map((item) => (
+        <a
+          href={item.href}
+          class={`font-body text-sm tracking-wide transition-colors hover:text-terracota ${
+            path === item.href ? "text-terracota" : "text-tinta"
+          }`}
+        >
+          {item.label}
+        </a>
+      ))}
+    </nav>
+
+    <a
+      href={contacto.whatsapp}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="hidden lg:inline-block rounded-full bg-oliva px-6 py-2.5 text-sm text-crema font-medium tracking-wide transition-colors hover:bg-terracota"
+    >
+      Agenda tu sesión
+    </a>
+
+    <button
+      id="menu-toggle"
+      class="lg:hidden flex flex-col gap-1.5 p-2"
+      aria-label="Abrir menú"
+      aria-expanded="false"
+    >
+      <span class="block h-0.5 w-6 bg-tinta"></span>
+      <span class="block h-0.5 w-6 bg-tinta"></span>
+      <span class="block h-0.5 w-6 bg-tinta"></span>
+    </button>
+  </div>
+
+  <nav id="mobile-menu" class="hidden lg:hidden border-t border-arena bg-crema px-6 py-4">
+    <ul class="flex flex-col gap-4">
+      {nav.map((item) => (
+        <li>
+          <a
+            href={item.href}
+            class={`block font-body text-base ${
+              path === item.href ? "text-terracota" : "text-tinta"
+            }`}
+          >
+            {item.label}
+          </a>
+        </li>
+      ))}
+      <li>
+        <a
+          href={contacto.whatsapp}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-block rounded-full bg-oliva px-6 py-2.5 text-sm text-crema font-medium"
+        >
+          Agenda tu sesión
+        </a>
+      </li>
+    </ul>
+  </nav>
+</header>
+
+<script>
+  const toggle = document.getElementById("menu-toggle");
+  const menu = document.getElementById("mobile-menu");
+  toggle?.addEventListener("click", () => {
+    const isOpen = menu?.classList.toggle("hidden") === false;
+    toggle.setAttribute("aria-expanded", String(isOpen));
+  });
+</script>

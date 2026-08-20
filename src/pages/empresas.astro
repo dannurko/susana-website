@@ -1,0 +1,74 @@
+---
+import { Image } from "astro:assets";
+import Layout from "../layouts/Layout.astro";
+import teambuilding from "../assets/teambuilding.jpg";
+import capacitacion from "../assets/capacitacion.jpg";
+import clienteCfe from "../assets/cliente-cfe.png";
+import { contacto } from "../config";
+
+const programas = [
+  { nombre: "Teambuilding", texto: "Dinámicas outdoor e indoor, baile y bioenergética para fortalecer la cohesión y confianza de tu equipo." },
+  { nombre: "Consultoría Sistémica", texto: "Diagnóstico, análisis y propuesta de solución con mirada de sistemas para tu organización." },
+  { nombre: "Brain Spa", texto: "Meditación en movimiento — Dance of Joy adaptado para empresas, para soltar tensión y renovar energía." },
+];
+
+const clientes = ["Bimbo", "Daimler Chrysler", "Colegio CDI", "Universidades"];
+---
+
+<Layout title="Empresas" description="Bienestar organizacional, teambuilding y consultoría sistémica con Susana Basáñez, más de 26 años apoyando empresas y organizaciones.">
+  <section class="mx-auto max-w-4xl px-6 py-20 text-center">
+    <h1 class="font-display text-4xl md:text-5xl mb-6">Bienestar Organizacional</h1>
+    <p class="text-tinta/80 leading-relaxed max-w-2xl mx-auto">
+      Programas diseñados para apoyar a personas y equipos de trabajo que
+      necesiten que los resultados de un desempeño profesional óptimo se
+      encuentren en sintonía con su estado energético, anímico y emocional.
+      Con más de 26 años de experiencia, apoyo a empresas y organizaciones a
+      desarrollar liderazgo humano y a fomentar en los grupos la
+      responsabilidad, entendida como la capacidad de responder de manera
+      creativa, productiva y auténtica a lo que ocurre.
+    </p>
+  </section>
+
+  <section class="mx-auto max-w-6xl px-6 pb-20 grid gap-6 md:grid-cols-2">
+    <Image src={teambuilding} alt="Teambuilding corporativo" class="rounded-2xl w-full h-full object-cover grayscale" widths={[480, 768, 1024]} sizes="(min-width: 768px) 50vw, 100vw" />
+    <Image src={capacitacion} alt="Capacitación en sala corporativa" class="rounded-2xl w-full h-full object-cover" widths={[480, 768, 1024]} sizes="(min-width: 768px) 50vw, 100vw" />
+  </section>
+
+  <section class="bg-arena">
+    <div class="mx-auto max-w-6xl px-6 py-20">
+      <h2 class="font-display text-3xl md:text-4xl text-center mb-12">Programas</h2>
+      <div class="grid gap-8 md:grid-cols-3">
+        {programas.map((p) => (
+          <div class="rounded-2xl bg-crema p-6">
+            <h3 class="font-display text-xl mb-2 text-terracota">{p.nombre}</h3>
+            <p class="text-sm text-tinta/80">{p.texto}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-4xl px-6 py-20 text-center">
+    <h2 class="font-display text-3xl md:text-4xl mb-10">Clientes</h2>
+    <div class="flex flex-wrap items-center justify-center gap-x-10 gap-y-6">
+      <Image src={clienteCfe} alt="CFE" class="h-12 w-auto object-contain" />
+      {clientes.map((c) => (
+        <span class="font-display text-xl text-tinta/70">{c}</span>
+      ))}
+    </div>
+  </section>
+
+  <section class="bg-tinta text-crema">
+    <div class="mx-auto max-w-3xl px-6 py-16 text-center">
+      <h2 class="font-display text-3xl md:text-4xl mb-6">¿Listos para invertir en tu equipo?</h2>
+      <a
+        href={contacto.whatsapp}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-block rounded-full bg-terracota px-8 py-3 text-sm font-medium text-crema hover:bg-oliva transition-colors"
+      >
+        Hablemos por WhatsApp
+      </a>
+    </div>
+  </section>
+</Layout>

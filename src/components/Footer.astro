@@ -1,0 +1,44 @@
+---
+import { Image } from "astro:assets";
+import logoBlanco from "../assets/logo-blanco.png";
+import { nav, contacto, social } from "../config";
+---
+
+<footer class="bg-tinta text-crema/90">
+  <div class="mx-auto max-w-6xl px-6 py-16 grid gap-12 md:grid-cols-3">
+    <div>
+      <Image src={logoBlanco} alt="Susana Basáñez" class="h-14 w-auto mb-4" />
+      <p class="text-sm text-crema/70 max-w-xs">
+        Psicoterapeuta de Core Energética · Consteladora Familiar ·
+        Especialista en Eneagrama. 26+ años acompañando procesos de
+        transformación.
+      </p>
+    </div>
+
+    <div>
+      <h3 class="font-display text-lg mb-4">Navegación</h3>
+      <ul class="flex flex-col gap-2 text-sm">
+        {nav.map((item) => (
+          <li><a href={item.href} class="hover:text-terracota transition-colors">{item.label}</a></li>
+        ))}
+      </ul>
+    </div>
+
+    <div>
+      <h3 class="font-display text-lg mb-4">Contacto</h3>
+      <ul class="flex flex-col gap-2 text-sm text-crema/80">
+        <li><a href={contacto.telefonoHref} class="hover:text-terracota transition-colors">{contacto.telefono}</a></li>
+        <li><a href={`mailto:${contacto.email}`} class="hover:text-terracota transition-colors">{contacto.email}</a></li>
+        <li>{contacto.direccion}</li>
+      </ul>
+      <div class="flex gap-4 mt-4">
+        <a href={social.instagram} target="_blank" rel="noopener noreferrer" class="hover:text-terracota transition-colors" aria-label="Instagram">Instagram</a>
+        <a href={social.spotify} target="_blank" rel="noopener noreferrer" class="hover:text-terracota transition-colors" aria-label="Spotify">Spotify</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="border-t border-crema/10 py-6 text-center text-xs text-crema/50">
+    © {new Date().getFullYear()} Susana Basáñez. Todos los derechos reservados.
+  </div>
+</footer>

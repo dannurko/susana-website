@@ -1,0 +1,33 @@
+---
+import { getCollection } from "astro:content";
+import Layout from "../../layouts/Layout.astro";
+
+const cursos = (await getCollection("cursos")).sort((a, b) => a.data.orden - b.data.orden);
+---
+
+<Layout title="Cursos y Talleres" description="Eneagrama, Constelaciones Familiares, Dance of Joy y Yoga Kundalini con Susana Basáñez en Ciudad de México.">
+  <section class="mx-auto max-w-4xl px-6 py-20 text-center">
+    <h1 class="font-display text-4xl md:text-5xl mb-4">Cursos y Talleres</h1>
+    <p class="text-tinta/80 max-w-xl mx-auto">
+      Espacios grupales de autoconocimiento y transformación en Ciudad de México.
+    </p>
+  </section>
+
+  <section class="mx-auto max-w-5xl px-6 pb-20 grid gap-8 md:grid-cols-2">
+    {cursos.map((curso) => (
+      <a href={`/cursos/${curso.id}/`} class="group block rounded-2xl border border-arena p-8 transition-colors hover:bg-arena">
+        <h2 class="font-display text-2xl mb-3">{curso.data.titulo}</h2>
+        <p class="text-sm text-tinta/80 mb-4">{curso.data.resumen}</p>
+        <div class="flex flex-wrap items-center gap-3 text-sm">
+          {curso.data.precio && (
+            <span class="font-medium text-terracota">
+              {curso.data.earlyBird ? `desde $${curso.data.earlyBird.toLocaleString("es-MX")} MXN` : `$${curso.data.precio.toLocaleString("es-MX")} MXN`}
+            </span>
+          )}
+          {curso.data.duracion && <span class="text-tinta/60">· {curso.data.duracion}</span>}
+        </div>
+        <span class="mt-4 inline-block text-sm font-medium text-terracota group-hover:text-oliva">Ver detalles →</span>
+      </a>
+    ))}
+  </section>
+</Layout>

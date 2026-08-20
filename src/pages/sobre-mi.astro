@@ -1,0 +1,87 @@
+---
+import { Image } from "astro:assets";
+import Layout from "../layouts/Layout.astro";
+import grupoTaller from "../assets/grupo-taller.jpg";
+
+const certificaciones = [
+  { anio: "2023", texto: "Tantra Cashimir con Daniel Odier y Aghora — Hungría" },
+  { anio: "2022", texto: "Gira en Europa de actualización psicoterapéutica y meditación — Grecia" },
+  { anio: "2022", texto: "Core Energetics Institute, especialidad de trabajo con grupos (Erena Bramos) — Grecia" },
+  { anio: "2020–2021", texto: "Talleres de Eneagrama en línea para empresas y particulares" },
+  { anio: "2018", texto: "Eneagrama" },
+  { anio: "2018", texto: "Leica — Coaching Ejecutivo" },
+  { anio: "2016", texto: "Trabajo en Equipo, metodología Outdoor Training, para Bimbo" },
+  { anio: "2015", texto: "Hassue — Capacitación y coaching para supervisores y gerentes" },
+  { anio: "2015", texto: "Universidad Cristóbal Colón — Eneagrama" },
+  { anio: "2013", texto: "Universidad Veracruzana — Taller Danza Extática, Equilibrio y Motivación" },
+  { anio: "2013", texto: "Universidad Cristóbal Colón — Conferencia Eneagrama, Psicología de los Eneatipos" },
+  { anio: "2007–2008", texto: "Capacitación a personal docente del Colegio CDI, Sonora" },
+  { anio: "2002", texto: "Capacitación al personal de Daimler Chrysler y distribuidores (5 años)" },
+];
+
+const publicaciones = [
+  'Capítulo en "El Carácter en la Relación de Ayuda, Eneatipos y Transferencia" (Dr. Claudio Naranjo)',
+  'Colaboración en el libro 4 "La Envidia" (Dr. Claudio Naranjo)',
+  'Podcast "¿De qué se trata esto?"',
+];
+---
+
+<Layout title="Sobre mí" description="Conoce la historia, formación y trayectoria de Susana Basáñez, psicoterapeuta con más de 26 años de experiencia.">
+  <section class="mx-auto max-w-5xl px-6 py-20 grid gap-12 md:grid-cols-2 items-center">
+    <Image
+      src={grupoTaller}
+      alt="Susana Basáñez"
+      class="rounded-2xl w-full h-auto object-cover grayscale"
+      widths={[480, 768, 1024]}
+      sizes="(min-width: 768px) 50vw, 100vw"
+      priority
+    />
+    <div>
+      <h1 class="font-display text-4xl md:text-5xl mb-6">Sobre mí</h1>
+      <p class="text-tinta/80 leading-relaxed">
+        He sido una buscadora tenaz y aventurera, tal vez porque me sentía tan
+        perdida de mí y sin brújula para aterrizar en la vida. Hoy pongo al
+        servicio de la vida y del que quiera encontrarse todos los recursos,
+        métodos, descubrimientos y realizaciones que en mi búsqueda me han
+        ayudado a mí, y me han hecho sentirme más en mi centro y con claridad
+        de lo que vine a ofrecer a la vida.
+      </p>
+    </div>
+  </section>
+
+  <section class="bg-arena">
+    <div class="mx-auto max-w-3xl px-6 py-16 text-center">
+      <p class="font-display text-2xl md:text-3xl leading-relaxed">
+        "He tenido grandes maestros. Algunos de ellos Claudio Naranjo, Keith
+        Dowman, Horacio Jaramillo, Aghora Vidya, Daniel Odier, Dunya
+        McPherson. He recibido enseñanzas ancestrales orientales y también
+        académicas occidentales. Hoy confío plenamente en que la mejor
+        maestra es la vida misma."
+      </p>
+    </div>
+  </section>
+
+  <section class="mx-auto max-w-3xl px-6 py-20">
+    <h2 class="font-display text-3xl md:text-4xl mb-10 text-center">Certificaciones y formación</h2>
+    <ol class="relative border-l border-arena pl-8 flex flex-col gap-8">
+      {certificaciones.map((c) => (
+        <li class="relative">
+          <span class="absolute -left-[calc(2rem+5px)] top-1.5 h-2.5 w-2.5 rounded-full bg-terracota"></span>
+          <span class="text-sm font-medium text-terracota">{c.anio}</span>
+          <p class="text-tinta/80">{c.texto}</p>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <section class="bg-tinta text-crema">
+    <div class="mx-auto max-w-3xl px-6 py-16">
+      <h2 class="font-display text-3xl md:text-4xl mb-8 text-center">Publicaciones</h2>
+      <ul class="flex flex-col gap-4">
+        {publicaciones.map((p) => (
+          <li class="text-crema/85 border-b border-crema/10 pb-4 last:border-0">{p}</li>
+        ))}
+      </ul>
+    </div>
+  </section>
+</Layout>
