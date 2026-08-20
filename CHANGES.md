@@ -35,3 +35,11 @@ Read the latest entries before starting work so the two Claudes don't clobber ea
   (desktop + mobile: hero, nav, mobile menu, all 8 pages, course detail, contact
   form fallback) via the Browser pane. Pushed to `main` (pre-domain = shared
   preview per CLAUDE.md workflow rules).
+- **Vercel connected (Dan, guided by Claude).** Dan created a Vercel account
+  (sign-in with GitHub as `SusanaBasanez`), granted the Vercel GitHub App access to
+  `susana-website` via github.com/settings/installations, imported the repo, and
+  deployed. Live at https://susana-website-psi.vercel.app — verified all pages,
+  nav, cursos pricing, and the contact form render correctly. Noted along the way:
+  the repo is actually **public** (CLAUDE.md previously said private — corrected).
+  No env vars set yet (Resend/payments still pending), so the contact form still
+  uses its WhatsApp fallback in production, as designed.

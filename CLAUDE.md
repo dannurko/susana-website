@@ -5,8 +5,8 @@ as code that Claude fully controls, hosted on modern free infrastructure. The cu
 Wix site stays live untouched until the new site is approved and the domain is switched
 over — zero downtime, nothing burned.
 
-This folder is the project root on **two computers**, kept in sync as a **private git
-repo**. The human on machine 2 does not code — they describe what they want in plain
+This folder is the project root on **two computers**, kept in sync as a **git
+repo** (public on GitHub — see note below). The human on machine 2 does not code — they describe what they want in plain
 language (Spanish or English) and Claude does everything. If you are Claude Code reading
 this: this file is your operating manual. Read [CHANGES.md](CHANGES.md) before working.
 
@@ -31,9 +31,11 @@ this: this file is your operating manual. Read [CHANGES.md](CHANGES.md) before w
 ## Enablement status (update as items complete)
 
 - [x] GitHub auth on machine 1 (`dannurko`, repo scope) — 2026-08-19
-- [x] Private GitHub repo created and pushed: https://github.com/dannurko/susana-website
+- [x] GitHub repo created and pushed: https://github.com/dannurko/susana-website
+      (note: repo is **public**, not private as originally planned — revisit if that matters)
 - [x] GitHub access on machine 2 (`gh auth login` as collaborator `SusanaBasanez`) — 2026-08-19
-- [ ] Vercel account (sign in with GitHub, one click) + repo connected
+- [x] Vercel account (`SusanaBasanez`, GitHub sign-in) + repo connected — 2026-08-19.
+      Live preview: https://susana-website-psi.vercel.app
 - [x] Site scraped: susanabasanez.com → `content/scrape/site-content.md` + `content/images/`
 - [ ] Domain: registrar + who holds DNS access (Dan believes it's registered AT Wix — verify in the Wix dashboard at cutover time)
 - [ ] Payments: Stripe or Mercado Pago account + **restricted** API key in the secrets file
